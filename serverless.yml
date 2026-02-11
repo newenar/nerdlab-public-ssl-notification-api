@@ -12,8 +12,8 @@ provider:
     PENDING_MESSAGES_QUEUE:
       Ref: PendingMessages
     PENDING_MESSAGES_QUEUE_NAME: PendingMessages
-    EMAIL_SOURCE: "xxxxxxxx@gmail.com" # Cambia esto por tu dirección de correo verificada en SES
-    DESTINATION_EMAIL: "xxxxxxxx@gmail.com" # Cambia esto por tu dirección de correo destino
+    EMAIL_SOURCE: ${ssm:/notification-api/email-source}
+    DESTINATION_EMAIL: ${ssm:/notification-api/destination-email}
 
   iamRoleStatements:
   - Effect: "Allow"
@@ -25,6 +25,10 @@ provider:
       - "ses:SendEmail"
       - "ses:SendRawEmail"
     Resource: "*"
+  - Effect: "Allow"
+    Action:
+      - "ssm:GetParameter"
+    Resource: "arn:aws:ssm:${self:provider.region}:${aws:accountId}:parameter/notification-api/*"
 
 functions:
   reciveMessage:
