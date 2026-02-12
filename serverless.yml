@@ -1,5 +1,5 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: sanit
+org: newenar
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: notification-api
 
@@ -14,6 +14,7 @@ provider:
     PENDING_MESSAGES_QUEUE_NAME: PendingMessages
     EMAIL_SOURCE: ${ssm:/notification-api/email-source}
     DESTINATION_EMAIL: ${ssm:/notification-api/destination-email}
+    CLOUDFRONT_DOMAIN: ${ssm:/notification-api/cloudfront-domain}
 
   iamRoleStatements:
   - Effect: "Allow"
@@ -29,14 +30,28 @@ provider:
     Action:
       - "ssm:GetParameter"
     Resource: "arn:aws:ssm:${self:provider.region}:${aws:accountId}:parameter/notification-api/*"
+  - Effect: "Allow"
+    Action:
+      - "dynamodb:GetItem"
+      - "dynamodb:PutItem"
+      - "dynamodb:UpdateItem"
+    Resource: "arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/email-rate-limit}"
 
 functions:
+  validateOrigin:
+    handler: endpoints/authorizer.handler
+
   reciveMessage:
-    handler: handler1.reciveMessage
+    handler: endpoints/receiveMessage.handler
     events:
-      - httpApi:
-          path: /recive
+      - http:
+          path: message
           method: post
+          authorizer:
+            name: validateOrigin
+            type: request
+            identitySource: method.request.header.Origin
+          cors: true
   sendEmail:
     handler: handler1.sendEmail
     events:
@@ -53,3 +68,18 @@ resources:
       Type: "AWS::SQS::Queue"
       Properties:
         QueueName: ${self:provider.environment.PENDING_MESSAGES_QUEUE_NAME}
+    
+    EmailRateLimitTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "email-rate-limit"
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: rateLimitKey
+            AttributeType: S
+        KeySchema:
+          - AttributeName: rateLimitKey
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: true
