@@ -35,7 +35,7 @@ provider:
       - "dynamodb:GetItem"
       - "dynamodb:PutItem"
       - "dynamodb:UpdateItem"
-    Resource: "arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/email-rate-limit}"
+    Resource: "arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/email-rate-limit"
 
 functions:
   validateOrigin:
