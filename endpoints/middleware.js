@@ -5,7 +5,7 @@
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient({ region: process.env.REGION });
 
-const RATE_LIMIT_TABLE = `email-rate-limit-${process.env.STAGE || 'prod'}`;
+const RATE_LIMIT_TABLE = 'email-rate-limit';
 const MAX_EMAILS_PER_HOUR = 5;
 const MAX_EMAILS_PER_EMAIL_PER_HOUR = 2;
 const MIN_SECONDS_BETWEEN_EMAILS = 300;
