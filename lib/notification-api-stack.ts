@@ -93,6 +93,14 @@ export class NotificationApiStack extends cdk.Stack {
       ),
     });
 
+    // 5 req/seg sostenidos, picos de hasta 10 — suficiente para un form de contacto.
+    // Exceder el límite devuelve HTTP 429 sin ejecutar ninguna Lambda.
+    const cfnStage = httpApi.defaultStage?.node.defaultChild as apigatewayv2.CfnStage;
+    cfnStage.defaultRouteSettings = {
+      throttlingRateLimit: 5,
+      throttlingBurstLimit: 10,
+    };
+
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: httpApi.apiEndpoint,
       description: 'HTTP API endpoint URL',
