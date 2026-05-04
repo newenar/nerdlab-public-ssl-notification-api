@@ -1,30 +1,77 @@
-# API HTTP Node con Serverless Framework en AWS
+# Notification API — AWS CDK
 
-Esta plantilla demuestra cómo crear una API HTTP con Node.js ejecutándose en AWS Lambda, API Gateway y Amazon SQS utilizando el Serverless Framework. Además, la API se integra con Amazon SES para enviar correos electrónicos.
+API de formulario de contacto desplegada en AWS con Lambda, API Gateway, SQS y SES.
 
-## Descripción General
+## Arquitectura
 
-Esta API maneja solicitudes a través de API Gateway, las procesa en una función Lambda, y envía los mensajes a una cola SQS. Otra función Lambda es activada por la cola SQS, que luego envía un correo electrónico utilizando Amazon SES.
+```
+POST /recive
+     │
+     ▼
+API Gateway (HTTP API)
+  └─ CORS: newenar.com / www.newenar.com
+  └─ Throttling: 5 req/seg, burst 10
+     │
+     ▼
+Lambda reciveMessage
+     │
+     ▼
+SQS PendingMessages
+     │
+     ▼
+Lambda sendEmail
+     │
+     ▼
+Amazon SES → email destino
+```
 
-### Componentes Clave
+## Requisitos previos
 
-- **API Gateway:** Gestiona las solicitudes HTTP entrantes y las dirige a la primera función Lambda.
-- **Funciones Lambda:**
-  - La primera función Lambda recibe y procesa la solicitud HTTP, luego envía un mensaje a la cola SQS.
-  - La segunda función Lambda es activada por la cola SQS y envía un correo electrónico a través de SES.
-- **Amazon SQS:** Actúa como un intermediario de mensajes, almacenando los mensajes de la primera función Lambda hasta que son procesados por la segunda.
-- **Amazon SES:** Envía correos electrónicos desencadenados por la segunda función Lambda.
-
-## Requisitos Previos
-
-Antes de desplegar la aplicación, asegúrate de tener lo siguiente configurado:
-
-- Una dirección de correo electrónico verificada en Amazon SES. Esto es necesario para enviar correos electrónicos utilizando SES.
-- Credenciales de AWS configuradas en tu máquina local o en tu pipeline de CI/CD.
-
-## Despliegue
-
-Para desplegar la API, ejecuta el siguiente comando:
+- Node.js 24
+- AWS CLI configurado (`aws configure`)
+- CDK bootstrap ejecutado una vez por cuenta/región:
 
 ```bash
-serverless deploy
+npx cdk bootstrap aws://<ACCOUNT_ID>/us-east-1
+```
+
+- Email verificado en Amazon SES (tanto el remitente como el destino si la cuenta está en sandbox)
+
+## Deploy
+
+```bash
+EMAIL_SOURCE=remitente@gmail.com DESTINATION_EMAIL=destino@gmail.com npm run deploy
+```
+
+> `EMAIL_SOURCE` debe ser un email verificado en SES.
+> Si la cuenta de AWS está en **modo sandbox** de SES, `DESTINATION_EMAIL` también debe estar verificado.
+
+## Endpoint
+
+```
+POST https://<api-id>.execute-api.us-east-1.amazonaws.com/recive
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastname": "Pérez",
+  "email": "juan@email.com",
+  "phone": "1234567890",
+  "message": "Hola, quiero información"
+}
+```
+
+## Comandos útiles
+
+```bash
+npm run synth    # genera el CloudFormation template
+npm run diff     # muestra cambios antes de deployar
+npm run deploy   # despliega en AWS
+npm run build    # compila TypeScript
+```
+
+## Destroy
+
+```bash
+npx cdk destroy
+```
