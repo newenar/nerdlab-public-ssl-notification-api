@@ -1,42 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
-        .container {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-        .header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
-        }
-        .content {
-            padding: 20px;
-            background-color: white;
-            border-radius: 0 0 5px 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo mensaje - Newenar</title>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h2>Nuevo mensaje recibido</h2>
-        </div>
-        <div class="content">
-            <p>El cliente: {{name}} {{lastname}},</p>
-            <p> Envia el mensaje: {{message}}</p>
-            <p> Datos de contacto: {{email}} - {{phone}} </p>
-        </div>
-    </div>
+<body style="margin:0;padding:0;background-color:#050812;font-family:'Inter',Arial,Helvetica,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#050812;min-height:100vh;">
+    <tr>
+      <td align="center" style="padding:48px 20px;">
+
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+
+          <!-- HEADER -->
+          <tr>
+            <td align="center" style="background:linear-gradient(135deg,#7c5cf8 0%,#f472b6 50%,#67e8f9 100%);border-radius:16px 16px 0 0;padding:40px 40px 36px;">
+              <div style="margin-bottom:12px;">
+                <span style="font-size:34px;font-weight:900;letter-spacing:-1.5px;color:#ffffff;">Newenar</span>
+              </div>
+              <div style="width:48px;height:2px;background:rgba(255,255,255,0.4);margin:0 auto 20px;border-radius:99px;"></div>
+              <p style="margin:0;font-size:17px;font-weight:600;color:#ffffff;letter-spacing:0.3px;">
+                Nuevo mensaje recibido
+              </p>
+              <p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.75);">
+                Desde el formulario de contacto de newenar.com
+              </p>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="background-color:#0A0F1E;border-left:1px solid rgba(124,92,248,0.2);border-right:1px solid rgba(124,92,248,0.2);padding:40px;">
+
+              <!-- Nombre -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
+                <tr>
+                  <td style="background-color:#0d1526;border:1px solid rgba(124,92,248,0.18);border-radius:12px;padding:16px 20px;">
+                    <span style="display:block;font-size:10px;font-weight:700;color:#7c5cf8;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:5px;">Nombre</span>
+                    <span style="font-size:16px;font-weight:500;color:#EEF1F8;">{{name}} {{lastname}}</span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Email -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
+                <tr>
+                  <td style="background-color:#0d1526;border:1px solid rgba(0,212,231,0.18);border-radius:12px;padding:16px 20px;">
+                    <span style="display:block;font-size:10px;font-weight:700;color:#00d4e7;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:5px;">Email</span>
+                    <span style="font-size:16px;font-weight:500;color:#EEF1F8;">{{email}}</span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Teléfono -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
+                <tr>
+                  <td style="background-color:#0d1526;border:1px solid rgba(244,114,182,0.18);border-radius:12px;padding:16px 20px;">
+                    <span style="display:block;font-size:10px;font-weight:700;color:#f472b6;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:5px;">Teléfono</span>
+                    <span style="font-size:16px;font-weight:500;color:#EEF1F8;">{{phone}}</span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Mensaje -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="background-color:#0d1526;border:1px solid rgba(124,92,248,0.25);border-left:3px solid #7c5cf8;border-radius:12px;padding:20px 20px 20px 18px;">
+                    <span style="display:block;font-size:10px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px;">Mensaje</span>
+                    <span style="font-size:15px;color:#d1d9ee;line-height:1.75;">{{message}}</span>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td align="center" style="background-color:#070d1a;border:1px solid rgba(124,92,248,0.12);border-top:none;border-radius:0 0 16px 16px;padding:24px 40px;">
+              <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(124,92,248,0.4),transparent);margin-bottom:20px;"></div>
+              <p style="margin:0 0 6px;font-size:13px;color:#8892a8;">
+                Enviado desde
+                <a href="https://www.newenar.com" style="color:#7c5cf8;text-decoration:none;font-weight:600;">newenar.com</a>
+              </p>
+              <p style="margin:0;font-size:11px;color:#3a4258;">
+                © 2025 Newenar &nbsp;·&nbsp; Soluciones de Software en la Nube
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>
