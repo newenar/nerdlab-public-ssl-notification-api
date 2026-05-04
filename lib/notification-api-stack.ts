@@ -76,6 +76,12 @@ export class NotificationApiStack extends cdk.Stack {
 
     const httpApi = new apigatewayv2.HttpApi(this, 'HttpApi', {
       apiName: 'notification-api',
+      corsPreflight: {
+        allowOrigins: ['https://newenar.com', 'https://www.newenar.com'],
+        allowMethods: [apigatewayv2.CorsHttpMethod.POST],
+        allowHeaders: ['Content-Type'],
+        maxAge: cdk.Duration.days(1),
+      },
     });
 
     httpApi.addRoutes({
